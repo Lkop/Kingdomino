@@ -18,8 +18,8 @@ public class Window extends JFrame{
         
         setTitle("Kingdomino");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(new Dimension(600, 500));
-        setMinimumSize(new Dimension(600, 500));
+        setSize(new Dimension(1000, 700));
+        setMinimumSize(new Dimension(1000, 700));
         setLayout(cl);
         
         //Close button event
@@ -34,5 +34,6 @@ public class Window extends JFrame{
     
     public void setPanel(String name) {
         cl.show(this.getContentPane(), name);
+        this.setVisible(true);
     }
 }

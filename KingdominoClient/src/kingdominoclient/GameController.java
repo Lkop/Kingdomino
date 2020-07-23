@@ -22,8 +22,11 @@ public class GameController {
     }
     
     public void openWindow() {
-        window.setVisible(true);
-        displayMenu();
+//        displayMenu();
+
+        //Debugging
+        player = new Player("a", "b");
+        displayTable();
     }
     
     public void displayMenu() {
@@ -36,7 +39,6 @@ public class GameController {
                 displayPlayerDetails();
             }
         });
-
     }
     
     public void displayPlayerDetails() {
@@ -69,7 +71,7 @@ public class GameController {
         
         window.add(panel_table, "Table");
         window.setPanel("Table");
-        
+
         play();
     }
     
