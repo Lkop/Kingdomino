@@ -14,9 +14,7 @@ import javax.swing.UIManager;
 
 
 public class PanelMenu extends JPanel{
-    
-    private int i=-1;
-    
+   
     private JButton start;
     
     public PanelMenu(){
@@ -40,31 +38,7 @@ public class PanelMenu extends JPanel{
                 start.setBackground(UIManager.getColor("control"));
             }
         });
-        
-//        start.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 
-                
-//                String name = JOptionPane.showInputDialog("What is your name?", null);
-//                Client.toServer(name);
-////                System.out.println(Client.fromServer());
-//                
-//                String[] colors = {"Green", "Red", "Blue", "Yellow"};
-//                String color = (String)JOptionPane.showInputDialog(null, "Pick a color: ", "Input", JOptionPane.INFORMATION_MESSAGE, null, colors, colors[0]);
-//                Client.toServer(color);
-//                System.out.println(Client.fromServer());
-                
-                /* table.add(new table(name, color,i));
-                table.setPreferredSize(new Dimension(500,450));
-                table.pack();//an to valoume se sxolio to parathiro tha exei to elaxisto dunato megethos
-                table.setLocationRelativeTo(null);//topothetei to parathiro sto kentro
-                table.setVisible(true);
-                table.setMinimumSize(new Dimension(400,400)); */
-//                table.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//            }
-//        });
-        
         JButton stop = new JButton("Διακοπή παιχνιδιού");
         //stop.setContentAreaFilled(false);
         stop.setBorderPainted(false);
