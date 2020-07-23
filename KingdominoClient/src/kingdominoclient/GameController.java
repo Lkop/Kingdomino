@@ -1,8 +1,10 @@
 package kingdominoclient;
 
-import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.swing.JLabel;
 
 
 public class GameController {
@@ -71,7 +73,45 @@ public class GameController {
         
         window.add(panel_table, "Table");
         window.setPanel("Table");
+        
+        panel_table.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                
+                //Get position from JLabel
+                for(int i=0; i<table.getHeight(); i++) {
+                    for(int j=0; j<table.getWidth(); j++) {
+                        if(((JLabel)e.getSource()) == panel_table.getViewTile(i, j)){
+                            System.out.println(i+" - "+j);
+                        }
+                    }
+                }
+                
+            }
 
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
+
+        panel_table.setTileImage(0, 0, "lake1c");
+        
+        Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake", 0));
+        panel_table.setPreviewDomino(domino);
+        
+        
         play();
     }
     

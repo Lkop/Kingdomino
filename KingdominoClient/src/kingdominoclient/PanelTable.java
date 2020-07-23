@@ -7,8 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,6 +20,10 @@ public class PanelTable extends JPanel{
     
     private Table table;
     private JLabel tiles[][];
+    
+    private Domino preview_domino;
+    private JLabel preview_tiles[][];
+    
     
     public PanelTable(Table table) {   
         this.table = table;
@@ -71,7 +74,7 @@ public class PanelTable extends JPanel{
         JButton b1 = new JButton("Rotate");
         JButton b2 = new JButton("Occupied Position");
         
-        JLabel preview_tiles[][] = new JLabel[2][2];
+        preview_tiles = new JLabel[2][2];
         String preview_tiles_string[][] = new String[2][2];
         
         for(int i=0; i<2; i++) {
@@ -90,38 +93,12 @@ public class PanelTable extends JPanel{
         panel.add(b1);
         panel.add(b2);
 
-        //Preview the domino's tiles
-        preview_tiles_string[0][0] = "farm";
-        preview_tiles_string[0][1] = "lake";
-        preview_tiles[0][0].setIcon(new ImageIcon("tiles/"+preview_tiles_string[0][0]+".png"));
-        preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_tiles_string[0][1]+".png"));
-                
         
         //Rotate right every time
         b1.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                //tmp
-                preview_tiles_string[1][0] = preview_tiles_string[1][1];
-
-                preview_tiles_string[1][1] = preview_tiles_string[0][1];
-                preview_tiles_string[0][1] = preview_tiles_string[0][0];
-                preview_tiles_string[0][0] = preview_tiles_string[1][0];
-                
-                if(preview_tiles_string[0][1] == null) {
-                    preview_tiles_string[0][1] = preview_tiles_string[1][1];
-                    preview_tiles_string[1][1] = null;
-                }
-                
-                //Clear tmp
-                preview_tiles_string[1][0] = null;
-
-                for(int i=0; i<2; i++) {
-                    for(int j=0; j<2; j++) {
-                        preview_tiles[i][j].setIcon(new ImageIcon("tiles/"+preview_tiles_string[i][j]+".png"));
-                    }
-                }                
+            public void actionPerformed(ActionEvent e) {             
+                rotateDominoClockwise();               
             }
         });
         
@@ -175,5 +152,49 @@ public class PanelTable extends JPanel{
 //
 //            }
 //        });
+    }
+    
+    public void addMouseListener(MouseListener ml) {
+        for(int i=0; i<table.getHeight(); i++) {
+            for(int j=0; j<table.getWidth(); j++) {
+               tiles[i][j].addMouseListener(ml); 
+            }
+        }    
+    }
+    
+    public JLabel getViewTile(int i, int j) {
+        return tiles[i][j];
+    }
+    
+    public void setPreviewDomino(Domino domino){
+        this.preview_domino = domino;       
+        preview_tiles[0][0].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
+        preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile2().getImage()+".png"));
+    }
+    
+    private void rotateDominoClockwise() {
+        preview_domino.changeOrientationClockwise();
+        
+        //Clear domino preview
+        for(int i=0; i<2; i++) {
+            for(int j=0; j<2; j++) {
+                preview_tiles[i][j].setIcon(null);
+            }
+        }
+        
+        Orientation orientation = preview_domino.getOrientation();
+        if(orientation == Orientation.LEFT_RIGHT) {
+            preview_tiles[0][0].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
+            preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile2().getImage()+".png"));
+        }else if(orientation == Orientation.UP_DOWN) {
+            preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
+            preview_tiles[1][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile2().getImage()+".png"));
+        }else if(orientation == Orientation.RIGHT_LEFT) {
+            preview_tiles[0][0].setIcon(new ImageIcon("tiles/"+preview_domino.getTile2().getImage()+".png"));
+            preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
+        }else{
+            preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile2().getImage()+".png"));
+            preview_tiles[1][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
+        }
     }
 }
