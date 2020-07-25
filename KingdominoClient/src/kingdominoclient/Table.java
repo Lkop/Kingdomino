@@ -27,9 +27,19 @@ public class Table {
         return this.domino_tile[i][j];
     }
     
-    public void setDomino(int i, int j, Domino domino) {
+    public boolean setDomino(int i, int j, Domino domino) {
         
         Orientation orientation = domino.getOrientation();
+        try {
+            if((orientation == Orientation.LEFT_RIGHT || orientation == Orientation.RIGHT_LEFT) &&(domino_tile[i][j] != null || domino_tile[i][j+1] != null))
+                return false;
+
+            if((orientation == Orientation.UP_DOWN || orientation == Orientation.DOWN_UP) && (domino_tile[i][j] != null || domino_tile[i+1][j] != null))
+                return false;
+        }catch(IndexOutOfBoundsException e) {
+            return false;
+        }
+        
         if(orientation == Orientation.LEFT_RIGHT) {
             domino_tile[i][j] = domino.getTile1();
             domino_tile[i][j+1] = domino.getTile2();
@@ -43,5 +53,6 @@ public class Table {
             domino_tile[i][j] = domino.getTile2();
             domino_tile[i+1][j] = domino.getTile1();
         }
-    }    
+        return true;
+    }
 }

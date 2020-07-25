@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 
 public class GameController {
@@ -27,7 +28,7 @@ public class GameController {
 //        displayMenu();
 
         //Debugging
-        player = new Player("a", "b");
+        player = new Player("Test", "Red");
         displayTable();
     }
     
@@ -78,7 +79,6 @@ public class GameController {
     }
     
     private void play() {
-        panel_table.setTileImage(0, 0, "lake1c");
         
         Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake", 0));
         panel_table.setPreviewDomino(domino);
@@ -97,7 +97,6 @@ public class GameController {
                         }
                     }
                 }
-                
             }
 
             @Override
@@ -119,14 +118,13 @@ public class GameController {
         
         panel_table.addOkButtonListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                table.setDomino(pos_i, pos_j, domino);
-                panel_table.loadTable(table);
+            public void actionPerformed(ActionEvent e) {    
+                if(table.setDomino(pos_i, pos_j, domino))
+                    panel_table.loadTable(table);
+                else
+                    JOptionPane.showMessageDialog(window, "Wrong position");
             }
         });
-        
-//        table.setDomino(0, 1, domino);
-//        panel_table.loadTable(table);
     }
     
     public void setPlayerData(String name, String color) {
