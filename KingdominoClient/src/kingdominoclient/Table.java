@@ -6,13 +6,13 @@ public class Table {
     private int height;
     private int width;
     
-    private TableData[][] data;
+    private Tile domino_tile[][];
     
     public Table(int height, int width){
         this.height = height;
         this.width = width;
         
-        data = new TableData[width][width];
+        domino_tile = new Tile[width][width];
     }
     
     public int getHeight() {
@@ -23,17 +23,25 @@ public class Table {
         return this.width;
     }
     
+    public Tile getTile(int i, int j) {
+        return this.domino_tile[i][j];
+    }
     
-//    public createTable(){
-//        JPanel a = new JPanel(new GridLayout(5,5));
-//        JButton b[][] = new JButton[5][5];
-//
-//        for (int i = 0; i < 5; i++)
-//            for (int j = 0; j < 5; j++){
-//                b[i][j] = new JButton(new ImageIcon("farm.png"));
-//                a.add(b[i][j]);
-//            }
-//        return a;
-//    }
-    
+    public void setDomino(int i, int j, Domino domino) {
+        
+        Orientation orientation = domino.getOrientation();
+        if(orientation == Orientation.LEFT_RIGHT) {
+            domino_tile[i][j] = domino.getTile1();
+            domino_tile[i][j+1] = domino.getTile2();
+        }else if (orientation == Orientation.UP_DOWN) {
+            domino_tile[i][j] = domino.getTile1();
+            domino_tile[i+1][j] = domino.getTile2();
+        }else if (orientation == Orientation.RIGHT_LEFT) {
+            domino_tile[i][j] = domino.getTile2();
+            domino_tile[i][j+1] = domino.getTile1();
+        }else{
+            domino_tile[i][j] = domino.getTile2();
+            domino_tile[i+1][j] = domino.getTile1();
+        }
+    }    
 }

@@ -17,8 +17,8 @@ public class GameController {
     private PanelPlayerDetails panel_pd = new PanelPlayerDetails();
     private Player player;
     private Table table;
+    private int pos_i, pos_j;
    
-    
     public GameController(Client client) {
         this.client = client;  
     }
@@ -74,6 +74,16 @@ public class GameController {
         window.add(panel_table, "Table");
         window.setPanel("Table");
         
+        play();
+    }
+    
+    private void play() {
+        panel_table.setTileImage(0, 0, "lake1c");
+        
+        Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake", 0));
+        panel_table.setPreviewDomino(domino);
+        
+                
         panel_table.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -82,7 +92,8 @@ public class GameController {
                 for(int i=0; i<table.getHeight(); i++) {
                     for(int j=0; j<table.getWidth(); j++) {
                         if(((JLabel)e.getSource()) == panel_table.getViewTile(i, j)){
-                            System.out.println(i+" - "+j);
+                            pos_i = i;
+                            pos_j = j;
                         }
                     }
                 }
@@ -105,19 +116,17 @@ public class GameController {
             public void mouseExited(MouseEvent e) {
             }
         });
-
-        panel_table.setTileImage(0, 0, "lake1c");
         
-        Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake", 0));
-        panel_table.setPreviewDomino(domino);
+        panel_table.addOkButtonListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                table.setDomino(pos_i, pos_j, domino);
+                panel_table.loadTable(table);
+            }
+        });
         
-        
-        play();
-    }
-    
-    private void play() {
-        //client.toServer("reeeeeee");
-        //System.out.println(client.fromServer());  
+//        table.setDomino(0, 1, domino);
+//        panel_table.loadTable(table);
     }
     
     public void setPlayerData(String name, String color) {

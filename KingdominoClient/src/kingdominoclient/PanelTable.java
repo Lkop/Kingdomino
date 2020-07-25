@@ -24,6 +24,7 @@ public class PanelTable extends JPanel{
     private Domino preview_domino;
     private JLabel preview_tiles[][];
     
+    private JButton ok_button;
     
     public PanelTable(Table table) {   
         this.table = table;
@@ -73,6 +74,7 @@ public class PanelTable extends JPanel{
         
         JButton b1 = new JButton("Rotate");
         JButton b2 = new JButton("Occupied Position");
+        ok_button = new JButton("Set Domino");
         
         preview_tiles = new JLabel[2][2];
         String preview_tiles_string[][] = new String[2][2];
@@ -92,7 +94,7 @@ public class PanelTable extends JPanel{
         
         panel.add(b1);
         panel.add(b2);
-
+        panel.add(ok_button);
         
         //Rotate right every time
         b1.addActionListener(new ActionListener() {
@@ -141,17 +143,22 @@ public class PanelTable extends JPanel{
         }
         return dominos;
     }
-    
+     
+    public void loadTable(Table table) {
+        for(int i=0; i<table.getHeight(); i++) {
+            for(int j=0; j<table.getWidth(); j++) {
+                
+                Tile tile = table.getTile(i, j);
+                if(tile != null)
+                    setTileImage(i, j, tile.getImage());   
+            }
+        }
+    }
+        
     public void setTileImage(int i, int j, String image) {
         
         tiles[i][j].setIcon(new ImageIcon(new ImageIcon("tiles/"+image+".png").getImage().getScaledInstance(tiles[i][j].getWidth(), tiles[i][j].getHeight(), java.awt.Image.SCALE_SMOOTH)));
-
-//        tiles[i][j].addComponentListener(new ComponentAdapter() {
-//            public void componentResized(ComponentEvent componentEvent) {
-//                tiles[i][j].setIcon(new ImageIcon(new ImageIcon("tiles/"+image+".png").getImage().getScaledInstance(tiles[i][j].getWidth(), tiles[i][j].getHeight(), java.awt.Image.SCALE_SMOOTH)));
-//
-//            }
-//        });
+//        tiles[i][j].setIcon(new ImageIcon(image));
     }
     
     public void addMouseListener(MouseListener ml) {
@@ -170,6 +177,10 @@ public class PanelTable extends JPanel{
         this.preview_domino = domino;       
         preview_tiles[0][0].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
         preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile2().getImage()+".png"));
+    }
+    
+    public void addOkButtonListener(ActionListener al) {
+        ok_button.addActionListener(al);
     }
     
     private void rotateDominoClockwise() {
@@ -197,4 +208,6 @@ public class PanelTable extends JPanel{
             preview_tiles[1][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
         }
     }
+    
+
 }
