@@ -18,5 +18,4 @@ public class Tile {
     public int getCrowns() {
         return this.crowns;
     }
-    
 }
