@@ -24,6 +24,8 @@ public class PanelTable extends JPanel{
     private Domino preview_domino;
     private JLabel preview_tiles[][];
     
+    private JLabel right_tiles[][];
+    
     private JButton ok_button;
     
     public PanelTable(Table table) {   
@@ -31,8 +33,8 @@ public class PanelTable extends JPanel{
         
         setLayout(new BorderLayout());
         add(createPanelTable(), BorderLayout.CENTER);
-        add(displayRightDominos(), BorderLayout.EAST);
-        add(previewDomino(), BorderLayout.SOUTH);
+        add(createRightDominos(), BorderLayout.EAST);
+        add(createPreviewDomino(), BorderLayout.SOUTH);
     }
         
     private JPanel createPanelTable() {
@@ -66,18 +68,13 @@ public class PanelTable extends JPanel{
         return panel;
     }
     
-    private JPanel previewDomino() {
+    private JPanel createPreviewDomino() {
                 
         JPanel panel = new JPanel(new FlowLayout());
         
         JPanel domino = new JPanel(new GridLayout(2,2));
-        
-        JButton b1 = new JButton("Rotate");
-        JButton b2 = new JButton("Occupied Position");
-        ok_button = new JButton("Set Domino");
-        
+
         preview_tiles = new JLabel[2][2];
-        String preview_tiles_string[][] = new String[2][2];
         
         for(int i=0; i<2; i++) {
             for(int j=0; j<2; j++) {
@@ -89,8 +86,11 @@ public class PanelTable extends JPanel{
                 domino.add(preview_tiles[i][j]);
             }
         }
-
         panel.add(domino);
+               
+        JButton b1 = new JButton("Rotate");
+        JButton b2 = new JButton("Occupied Position");
+        ok_button = new JButton("Set Domino");
         
         panel.add(b1);
         panel.add(b2);
@@ -113,34 +113,44 @@ public class PanelTable extends JPanel{
         return panel;
     }
     
-     private JPanel displayRightDominos() {
-        JPanel dominos= new JPanel(new GridLayout(4,3));
-        JLabel tiles[][] = new JLabel[4][4];
+     private JPanel createRightDominos() {
+        JPanel dominos = new JPanel(new GridLayout(1,2,20,0));
+        
+        //Left
+        JPanel inner[] = new JPanel[2];
+        inner[0] = new JPanel(new GridLayout(4,1,0,10));
+        inner[1] = new JPanel(new GridLayout(4,1,0,10));
+        
+        right_tiles = new JLabel[4][4];
 
         for(int i=0; i<4; i++) {
-            for(int j=0; j<4; j++) {
-                
-                tiles[i][j] = new JLabel();
-                
-                //Adding pretty border
-                Border border;
-                if(i==0 && j==0)
-                    border = new MatteBorder(1, 1, 1, 1, Color.BLACK);
-                else if(i==0)
-                    border = new MatteBorder(1, 0, 1, 1, Color.BLACK);
-                else if(j==0)    
-                    border = new MatteBorder(0, 1, 1, 1, Color.BLACK);
-                else
-                    border = new MatteBorder(0, 0, 1, 1, Color.BLACK);
-                
-                tiles[i][j].setBorder(border);
-                tiles[i][j].setMinimumSize(new Dimension(100, 100));
-                tiles[i][j].setPreferredSize(new Dimension(100, 100));
-                tiles[i][j].setMaximumSize(new Dimension(100, 100));
-                
-                dominos.add(tiles[i][j]);
+            for(int j=0; j<2; j++) {
+
+                right_tiles[i][j] = new JLabel(i+" = "+j);
+                right_tiles[i][j].setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+                right_tiles[i][j].setMinimumSize(new Dimension(100, 100));
+                right_tiles[i][j].setPreferredSize(new Dimension(100, 100));
+                right_tiles[i][j].setMaximumSize(new Dimension(100, 100));
+
+                inner[0].add(right_tiles[i][j]);
             }
         }
+        dominos.add(inner[0]);
+
+        for(int i=0; i<4; i++) {
+            for(int j=2; j<4; j++) {
+
+                right_tiles[i][j] = new JLabel(i+" = "+j);
+                right_tiles[i][j].setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+                right_tiles[i][j].setMinimumSize(new Dimension(100, 100));
+                right_tiles[i][j].setPreferredSize(new Dimension(100, 100));
+                right_tiles[i][j].setMaximumSize(new Dimension(100, 100));
+
+                inner[1].add(right_tiles[i][j]);
+            }
+        }
+        dominos.add(inner[1]);
+        
         return dominos;
     }
      
@@ -155,8 +165,7 @@ public class PanelTable extends JPanel{
         }
     }
         
-    public void setTileImage(int i, int j, String image) {
-        
+    public void setTileImage(int i, int j, String image) {  
         tiles[i][j].setIcon(new ImageIcon(new ImageIcon("tiles/"+image+".png").getImage().getScaledInstance(tiles[i][j].getWidth(), tiles[i][j].getHeight(), java.awt.Image.SCALE_SMOOTH)));
 //        tiles[i][j].setIcon(new ImageIcon(image));
     }
@@ -178,9 +187,20 @@ public class PanelTable extends JPanel{
         preview_tiles[0][0].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
         preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile2().getImage()+".png"));
     }
-    
+        
     public void addOkButtonListener(ActionListener al) {
         ok_button.addActionListener(al);
+    }
+    
+    public void setRightDomino(int i, int j, Domino domino) {  
+        if(j == 0 || j == 2) {
+            right_tiles[i][j].setIcon(resizeImage(domino.getTile1().getImage(), right_tiles[i][j]));
+            right_tiles[i][j+1].setIcon(resizeImage(domino.getTile2().getImage(), right_tiles[i][j+1]));
+        }
+    }
+    
+    private ImageIcon resizeImage(String image, JLabel label_tile) {
+        return new ImageIcon(new ImageIcon("tiles/"+image+".png").getImage().getScaledInstance(label_tile.getWidth(), label_tile.getHeight(), java.awt.Image.SCALE_DEFAULT));
     }
     
     private void rotateDominoClockwise() {
@@ -208,6 +228,4 @@ public class PanelTable extends JPanel{
             preview_tiles[1][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
         }
     }
-    
-
 }

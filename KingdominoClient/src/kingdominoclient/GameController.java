@@ -80,6 +80,10 @@ public class GameController {
     
     private void play() {
         
+        Domino domino_r1 = new Domino(1, new Tile("farm", 0), new Tile("lake", 0));
+        
+        panel_table.setRightDomino(0, 0, domino_r1);
+        
         Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake", 0));
         panel_table.setPreviewDomino(domino);
         
