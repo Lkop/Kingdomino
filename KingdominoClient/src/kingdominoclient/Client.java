@@ -24,7 +24,6 @@ public class Client {
         }catch (IOException ex) {
             System.err.println(ex);
         }
-        
         return true;
     }
     
@@ -38,5 +37,4 @@ public class Client {
         else
             return null;
     }
-
 }
