@@ -2,7 +2,6 @@ package kingdominoserver;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 
 public class Main {
@@ -61,6 +60,7 @@ public class Main {
         }
         
         int clients_count = players.size();
+        System.out.println(clients_count);
         
         for(int i=0; i<clients_count; i++) {
             Server.toClient(i, "start");  
@@ -68,16 +68,20 @@ public class Main {
 
         //Shuffle turns to start the game
         Collections.shuffle(turn);
-        
+
         for(int i=0; i<clients_count; i++) {
-            for(int j=0; j<4; j++) {
-                Server.toClient(turn.get(i), "0,farm,0,lake,0");
+            for(int j=0; j<4; j++){
+                Server.toClient(i, "0,land,0,land,0");
             }
-            
-            for(int j=0; j<4; j++) {
-                Server.toClient(turn.get(i), "0,land,0,farm,0");
+            for(int j=0; j<4; j++){
+                Server.toClient(i, "0,lake,0,lake,0");
             }
         }
+        
+        while(true){
+        
+        }
+        
 //        DominoParser dp = new DominoParser();
         
     }
