@@ -81,28 +81,31 @@ public class GameController {
         window.add(panel_table, "Table");
         window.setPanel("Table");
         
+        panel_table.displayPlayerData(player.getName(), player.getColorString(), player.getScore());
+        
         play();
     }
     
     private void play() {
+        
+        Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake1c", 0));
+        panel_table.setPreviewDomino(domino);
+                
         //First column right dominos
         String domino_parts[];
+        
         for(int i=0; i<4; i++){
-            domino_parts = Client.fromServer().split(",");
+            domino_parts = Client.fromServer().split(",");    
             Domino domino_r = new Domino(Integer.parseInt(domino_parts[0]), new Tile(domino_parts[1], Integer.parseInt(domino_parts[2])), new Tile(domino_parts[3], Integer.parseInt(domino_parts[4])));
             panel_table.setRightDomino(i, 0, domino_r);
         }
-
+        
         for(int i=0; i<4; i++){
             domino_parts = Client.fromServer().split(",");
             Domino domino_r = new Domino(Integer.parseInt(domino_parts[0]), new Tile(domino_parts[1], Integer.parseInt(domino_parts[2])), new Tile(domino_parts[3], Integer.parseInt(domino_parts[4])));
             panel_table.setRightDomino(i, 2, domino_r);
         }
         
-        Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake1c", 0));
-        panel_table.setPreviewDomino(domino);
-        
-                
         panel_table.addMouseListener("table", new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -181,9 +184,5 @@ public class GameController {
                     JOptionPane.showMessageDialog(window, "Wrong position");
             }
         });
-    }
-    
-    public void setPlayerData(String name, String color) {
-        player = new Player(name, color);
     }
 }

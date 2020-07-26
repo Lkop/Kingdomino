@@ -11,13 +11,14 @@ public class Client {
     
     private static PrintWriter to_server;
     private static Scanner from_server;
+    private static Socket socket;
     
     public boolean connect() {
         try {
-            Socket echoSocket = new Socket("localhost", 7777);
+            socket = new Socket("localhost", 7777);
             
-            to_server = new PrintWriter(echoSocket.getOutputStream(), true);
-            from_server = new Scanner(echoSocket.getInputStream());
+            to_server = new PrintWriter(socket.getOutputStream(), true);
+            from_server = new Scanner(socket.getInputStream());
             
         }catch (UnknownHostException ex) {
             System.err.println(ex);
@@ -32,9 +33,6 @@ public class Client {
     }
     
     public static String fromServer() {
-        if(from_server.hasNextLine())
-            return from_server.nextLine();
-        else
-            return null;
+        return from_server.nextLine();
     }
 }
