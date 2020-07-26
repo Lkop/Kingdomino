@@ -27,11 +27,11 @@ public class GameController {
     }
     
     public void openWindow() {
-//        displayMenu();
+        displayMenu();
 
-        //Debugging
-        player = new Player("Test", "Blue");
-        displayTable();
+//        //Debugging
+//        player = new Player("Test", "Blue");
+//        displayTable();
     }
     
     public void displayMenu() {
@@ -53,7 +53,11 @@ public class GameController {
         panel_pd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Client.toServer(panel_pd.getName()+","+panel_pd.getColor());
+                
+                if(e.getSource() == panel_pd.getStartButton())
+                    Client.toServer(panel_pd.getName()+","+panel_pd.getColor()+",no");
+                else
+                    Client.toServer(panel_pd.getName()+","+panel_pd.getColor()+",yes");
                 
                 //Players data response from server
                 String name = Client.fromServer();
@@ -81,10 +85,19 @@ public class GameController {
     }
     
     private void play() {
-        
-        Domino domino_r1 = new Domino(1, new Tile("forest", 0), new Tile("field", 0));
-        
-        panel_table.setRightDomino(0, 0, domino_r1);
+        //First column right dominos
+        String domino_parts[];
+        for(int i=0; i<4; i++){
+            domino_parts = Client.fromServer().split(",");
+            Domino domino_r = new Domino(Integer.parseInt(domino_parts[0]), new Tile(domino_parts[1], Integer.parseInt(domino_parts[2])), new Tile(domino_parts[3], Integer.parseInt(domino_parts[4])));
+            panel_table.setRightDomino(i, 0, domino_r);
+        }
+
+        for(int i=0; i<4; i++){
+            domino_parts = Client.fromServer().split(",");
+            Domino domino_r = new Domino(Integer.parseInt(domino_parts[0]), new Tile(domino_parts[1], Integer.parseInt(domino_parts[2])), new Tile(domino_parts[3], Integer.parseInt(domino_parts[4])));
+            panel_table.setRightDomino(i, 2, domino_r);
+        }
         
         Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake1c", 0));
         panel_table.setPreviewDomino(domino);

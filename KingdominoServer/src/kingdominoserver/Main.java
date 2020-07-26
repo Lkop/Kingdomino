@@ -1,34 +1,83 @@
 package kingdominoserver;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 public class Main {
-
+    
     public static void main(String[] args) {
         
         Server server = new Server();
         
-        //Wait until all client get connected
-        int clients_count = server.acceptConnections();
-        
+        //Handle player's turn
+        ArrayList<Integer> turn = new ArrayList<>();
+
         //Save clients-players data (name, color)
-        String clients_data[][] = new String[clients_count][2];
+        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<String> player_wait = new ArrayList<>();
         
         //Parse players' data (name, color)
-        for(int i=0; i<clients_count; i++) {
+        for(int i=0; i<4; i++) {
+            
+            //Wait until all client get connected
+            server.acceptConnection();
+        
+            //Split data (name, color, wait)
             String players_data_unparsed = Server.fromClient(i);
-            
             String[] parts = players_data_unparsed.split(",");
-            clients_data[i][0] = parts[0];
-            clients_data[i][1] = parts[1];
             
-            Server.toClient(i, clients_data[i][0]);
-            Server.toClient(i, clients_data[i][1]);
+            Player player = new Player(parts[0], parts[1]);
+            players.add(player);
+                
+            //Tmp wait for players
+            player_wait.add(parts[2]);
+            
+            /*
+            Same name check
+            */
+            
+            //Add turn of player
+            turn.add(i);
+            
+            //Confirm to client player's data
+            Server.toClient(i, players.get(i).getName());
+            Server.toClient(i, players.get(i).getColor());
+            
+            if(i >= 1) {
+                boolean wait = false;
+                for(int j=0; j<player_wait.size(); j++) {
+                    if(player_wait.get(j).equals("yes")) {
+                        wait = true;
+                        break;
+                    }
+                }
+                
+                //Stop waiting
+                if(!wait)
+                    break;
+            }
         }
         
-        for(int i=0; i<clients_count; i++) {
-            Server.toClient(i, "start");
-        }        
+        int clients_count = players.size();
         
+        for(int i=0; i<clients_count; i++) {
+            Server.toClient(i, "start");  
+        }
+
+        //Shuffle turns to start the game
+        Collections.shuffle(turn);
+        
+        for(int i=0; i<clients_count; i++) {
+            for(int j=0; j<4; j++) {
+                Server.toClient(turn.get(i), "0,farm,0,lake,0");
+            }
+            
+            for(int j=0; j<4; j++) {
+                Server.toClient(turn.get(i), "0,land,0,farm,0");
+            }
+        }
 //        DominoParser dp = new DominoParser();
         
     }

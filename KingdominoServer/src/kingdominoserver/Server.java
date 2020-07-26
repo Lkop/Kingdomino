@@ -14,7 +14,7 @@ public class Server {
     private ServerSocket serverSocket = null;
     
     private static Map<Integer, Socket> clients = new HashMap<>();
-    
+    private int client_id=0;
     
     public Server() {
         try {
@@ -23,28 +23,11 @@ public class Server {
             System.err.println(ex);
         }
         System.out.println("Server is running...");
-
-//        while(true){
-//            try {    
-//                Socket clientSocket = serverSocket.accept();
-//
-//                from_client = new Scanner(clientSocket.getInputStream());          
-//                to_client = new PrintWriter(clientSocket.getOutputStream(), true);
-//
-//                while(from_client.hasNextLine()){
-//                    String message = from_client.nextLine();
-//                    System.out.println("Received: " + message);
-//                    to_client.println(message);
-//                }
-//            }catch (IOException ex) {
-//                System.err.println(ex);
-//            }
-//        }
     }
     
-    public int acceptConnections() {
+    public void acceptConnection() {
 
-        for(int i=0; i<2; i++) {
+//        for(int i=clients.size(); i<2; i++) {
 
             Socket clientSocket = null;
             try {
@@ -52,11 +35,12 @@ public class Server {
             }catch (IOException ex) {
                 System.err.println(ex);
             }
-            System.out.println("Server accepted a connection");
-
-            clients.put(i, clientSocket);            
-        }
-        return 2;
+            clients.put(client_id, clientSocket);
+            client_id++;
+            
+            System.out.println("Server accepted a connection");        
+        //}
+//        return clients.size();
     }
     
     
