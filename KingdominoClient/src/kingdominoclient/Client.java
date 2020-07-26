@@ -33,7 +33,10 @@ public class Client {
     }
     
     public static String fromServer() {
-        return from_server.nextLine();
+        if(from_server.hasNextLine())
+            return from_server.nextLine();
+        else
+            return null;
     }
 
 }
