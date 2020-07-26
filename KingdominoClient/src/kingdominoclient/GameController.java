@@ -1,11 +1,13 @@
 package kingdominoclient;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.border.MatteBorder;
 
 
 public class GameController {
@@ -28,7 +30,7 @@ public class GameController {
 //        displayMenu();
 
         //Debugging
-        player = new Player("Test", "Red");
+        player = new Player("Test", "Blue");
         displayTable();
     }
     
@@ -58,7 +60,7 @@ public class GameController {
                 String color = Client.fromServer();
                 
                 player = new Player(name, color);
-                System.out.println(player.getName()+" - "+player.getColor());
+                System.out.println(player.getName()+" - "+player.getColorString());
 
                 //Wait to start the game
                 String res = Client.fromServer();
@@ -80,24 +82,61 @@ public class GameController {
     
     private void play() {
         
-        Domino domino_r1 = new Domino(1, new Tile("farm", 0), new Tile("lake", 0));
+        Domino domino_r1 = new Domino(1, new Tile("forest", 0), new Tile("field", 0));
         
         panel_table.setRightDomino(0, 0, domino_r1);
         
-        Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake", 0));
+        Domino domino = new Domino(1, new Tile("farm", 0), new Tile("lake1c", 0));
         panel_table.setPreviewDomino(domino);
         
                 
-        panel_table.addMouseListener(new MouseListener() {
+        panel_table.addMouseListener("table", new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 
                 //Get position from JLabel
                 for(int i=0; i<table.getHeight(); i++) {
                     for(int j=0; j<table.getWidth(); j++) {
-                        if(((JLabel)e.getSource()) == panel_table.getViewTile(i, j)){
+                        if(((JLabel)e.getSource()) == panel_table.getViewTile("table", i, j)){
                             pos_i = i;
                             pos_j = j;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
+        
+        panel_table.addMouseListener("right", new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                
+                //Get position from JLabel
+                for(int i=0; i<4; i++) {
+                    for(int j=2; j<4; j++) {
+                        if(((JLabel)e.getSource()) == panel_table.getViewTile("right", i, j)){
+                            if(j==2) {
+                                panel_table.getViewTile("right", i, j).setBorder(new MatteBorder(2, 2, 2, 0, player.getColor()));
+                                panel_table.getViewTile("right", i, j+1).setBorder(new MatteBorder(2, 0, 2, 2, player.getColor()));   
+                            }else{
+                                panel_table.getViewTile("right", i, j-1).setBorder(new MatteBorder(2, 2, 2, 0, player.getColor()));
+                                panel_table.getViewTile("right", i, j).setBorder(new MatteBorder(2, 0, 2, 2, player.getColor()));   
+                            }
                         }
                     }
                 }

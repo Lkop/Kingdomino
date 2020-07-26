@@ -170,22 +170,34 @@ public class PanelTable extends JPanel{
 //        tiles[i][j].setIcon(new ImageIcon(image));
     }
     
-    public void addMouseListener(MouseListener ml) {
+    public void addMouseListener(String type, MouseListener ml) {
+        if(type.equals("right")){
+            for(int i=0; i<4; i++) {
+                    for(int j=2; j<4; j++) {
+                       right_tiles[i][j].addMouseListener(ml); 
+                    }
+                }
+            return;
+        }
+        
         for(int i=0; i<table.getHeight(); i++) {
             for(int j=0; j<table.getWidth(); j++) {
                tiles[i][j].addMouseListener(ml); 
             }
         }    
     }
-    
-    public JLabel getViewTile(int i, int j) {
+
+    public JLabel getViewTile(String type, int i, int j) {
+        if(type.equals("right"))
+            return right_tiles[i][j];
+
         return tiles[i][j];
     }
     
     public void setPreviewDomino(Domino domino){
         this.preview_domino = domino;       
-        preview_tiles[0][0].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
-        preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile2().getImage()+".png"));
+        preview_tiles[0][0].setIcon(resizeImage(domino.getTile1().getImage(), preview_tiles[0][0]));
+        preview_tiles[0][1].setIcon(resizeImage(domino.getTile2().getImage(), preview_tiles[0][1]));
     }
         
     public void addOkButtonListener(ActionListener al) {
@@ -228,4 +240,10 @@ public class PanelTable extends JPanel{
             preview_tiles[1][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
         }
     }
+    
+    public void selectRightDomino(int pos) {
+    
+        
+    }
+
 }
