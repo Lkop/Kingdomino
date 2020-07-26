@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 public class PanelPlayerDetails extends JPanel{
    
     private String[] colors = { "Red", "Green", "Blue", "Yellow" };
-    private JButton sub;
+    private JButton start, start_wait;
     private JTextField name;
     private JComboBox color;
 
@@ -22,7 +22,8 @@ public class PanelPlayerDetails extends JPanel{
         
         name = new JTextField(15);
         color = new JComboBox();
-        sub = new JButton("Submit");
+        start = new JButton("Start");
+        start_wait = new JButton("Start - Wait more players");
         
         JPanel l1 = new JPanel(new FlowLayout());
         JPanel l2 = new JPanel(new FlowLayout());
@@ -46,18 +47,24 @@ public class PanelPlayerDetails extends JPanel{
         add(l3);
         l4.add(color);
         add(l4);
-        l5.add(sub);
+        l5.add(start);
+        l5.add(start_wait);
         add(l5);
     }
     
     public void addActionListener(ActionListener lis) {
-        sub.addActionListener(lis);
+        start.addActionListener(lis);
+        start_wait.addActionListener(lis);
     }
     
-    public String getName(){
+    public JButton getStartButton() {
+        return start;
+    }
+    
+    public String getName() {
         return name.getText();
     }
-    public String getColor(){
+    public String getColor() {
         return color.getSelectedItem().toString();
     }
 }
