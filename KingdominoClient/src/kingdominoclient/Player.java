@@ -9,6 +9,7 @@ public class Player {
     private String color_str;
     private Color color;
     private Table table;
+    private int score=0;
     
     public Player(String name, String color){
         this.name = name;
@@ -31,6 +32,13 @@ public class Player {
     
     public Color getColor() {
         return this.color;
+    }
+    public void setScore(int score) {
+        this.score = score;
+    }
+    
+    public int getScore() {
+        return this.score;
     }
     
     private Color strToColor(String color) {
