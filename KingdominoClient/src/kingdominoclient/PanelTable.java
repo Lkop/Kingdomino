@@ -18,6 +18,8 @@ import javax.swing.border.MatteBorder;
 
 public class PanelTable extends JPanel{
     
+    private JLabel name, color, score;
+    
     private Table table;
     private JLabel tiles[][];
     
@@ -32,11 +34,28 @@ public class PanelTable extends JPanel{
         this.table = table;
         
         setLayout(new BorderLayout());
+        add(createPlayerData(), BorderLayout.NORTH);
         add(createPanelTable(), BorderLayout.CENTER);
         add(createRightDominos(), BorderLayout.EAST);
         add(createPreviewDomino(), BorderLayout.SOUTH);
     }
+    
+    private JPanel createPlayerData() {
+        JPanel panel = new JPanel(new FlowLayout());
         
+        name = new JLabel();
+        color = new JLabel();
+        score = new JLabel();
+        
+        panel.add(name);
+        panel.add(color);
+        panel.add(score);
+        
+        panel.setSize(new Dimension(100,100));
+        
+        return panel;
+    }
+
     private JPanel createPanelTable() {
         
         JPanel panel = new JPanel();
@@ -239,6 +258,12 @@ public class PanelTable extends JPanel{
             preview_tiles[0][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile2().getImage()+".png"));
             preview_tiles[1][1].setIcon(new ImageIcon("tiles/"+preview_domino.getTile1().getImage()+".png"));
         }
+    }
+    
+    public void displayPlayerData(String name, String color, int score) {
+        this.name.setText(name);
+        this.color.setText(color);
+        this.score.setText(score+"");
     }
     
     public void selectRightDomino(int pos) {
