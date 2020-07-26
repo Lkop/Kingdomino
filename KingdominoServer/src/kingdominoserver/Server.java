@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -16,6 +17,9 @@ public class Server {
     private static Map<Integer, Socket> clients = new HashMap<>();
     private int client_id=0;
     
+    private static ArrayList<PrintWriter> to_client = new ArrayList<>();
+    private static ArrayList<Scanner> from_client = new ArrayList<>();
+            
     public Server() {
         try {
             serverSocket = new ServerSocket(7777);
@@ -27,45 +31,35 @@ public class Server {
     
     public void acceptConnection() {
 
-//        for(int i=clients.size(); i<2; i++) {
-
-            Socket clientSocket = null;
-            try {
-                clientSocket = serverSocket.accept();             
-            }catch (IOException ex) {
-                System.err.println(ex);
-            }
-            clients.put(client_id, clientSocket);
-            client_id++;
-            
-            System.out.println("Server accepted a connection");        
-        //}
-//        return clients.size();
-    }
-    
-    
-    public static void toClient(int i, String data) {
+        Socket clientSocket = null;
         try {
-            PrintWriter to_client = new PrintWriter(clients.get(i).getOutputStream(), true);
-            to_client.println(data);
+            clientSocket = serverSocket.accept();             
         }catch (IOException ex) {
             System.err.println(ex);
         }
+        
+        clients.put(client_id, clientSocket);
+        
+        try {
+            PrintWriter to = new PrintWriter(clients.get(client_id).getOutputStream(), true);
+            to_client.add(to);
+
+            Scanner from = new Scanner(clients.get(client_id).getInputStream());
+            from_client.add(from);
+        }catch (IOException ex) {
+            System.err.println(ex);
+        }
+        
+        client_id++;
+
+        System.out.println("Server accepted a connection");
+    }
+
+    public static void toClient(int i, String data) {
+        to_client.get(i).println(data); 
     }
     
     public static String fromClient(int i) {
-        
-        Scanner from_client = null;
-        try {
-            from_client = new Scanner(clients.get(i).getInputStream());
-        }catch (IOException ex) {
-            System.err.println(ex);
-        }
-        
-        if(from_client.hasNextLine()){
-            return from_client.nextLine();
-        }else{
-            return null;
-        }
+        return from_client.get(i).nextLine();
     }
 }
