@@ -36,7 +36,7 @@ public class Main {
             String players_data_unparsed = Server.fromClient(i);
             String[] parts = players_data_unparsed.split(",");
             
-            Player player = new Player(parts[0], parts[1]);
+            Player player = new Player(i, parts[0], parts[1]);
             players.add(player);
                 
             //Tmp wait for players
@@ -50,6 +50,7 @@ public class Main {
             turn.add(i);
             
             //Confirm to client player's data
+            Server.toClient(i, players.get(i).getId()+"");
             Server.toClient(i, players.get(i).getName());
             Server.toClient(i, players.get(i).getColor());
             
@@ -70,7 +71,6 @@ public class Main {
         }
         
         int clients_count = players.size();
-        System.out.println(clients_count);
         
         for(int i=0; i<clients_count; i++) {
             Server.toClient(i, "start");
@@ -85,19 +85,66 @@ public class Main {
 
         for(int i=list_size_full-1; i>12*clients_count-1; i--){
             dominos_list.remove(i);
-        }        
-        
-        for(int i=0; i<clients_count; i++) {
-            for(int j=0; j<clients_count; j++){
-                Server.toClient(i, "0,land,0,land,0");
-            }
-            for(int j=0; j<clients_count; j++){
-                Server.toClient(i, "0,lake,0,lake,0");
-            }
         }
-        
-        while(true){
-        
-        }  
+          
+        boolean first_time=true;
+        ArrayList<ArrayList<String>> tmp_dominos_list_l = new ArrayList<>();
+        ArrayList<ArrayList<String>> tmp_dominos_list_r = new ArrayList<>();
+
+        while(dominos_list.size() > 0){
+            
+            int tmp_max = dominos_list.size();
+            int tmp_min = dominos_list.size()-clients_count;
+            for(int i=tmp_max-1; i>tmp_min-1; i--) {
+                tmp_dominos_list_r.add(dominos_list.get(i));
+                dominos_list.remove(i);
+            }
+            
+            if(first_time){
+                tmp_dominos_list_l = (ArrayList)tmp_dominos_list_r.clone();
+                tmp_dominos_list_r.clear();
+                
+                tmp_max = dominos_list.size();
+                tmp_min = dominos_list.size()-clients_count;
+                for(int i=tmp_max-1; i>tmp_min-1; i--) {
+                    tmp_dominos_list_r.add(dominos_list.get(i));
+                    dominos_list.remove(i);
+                }
+                
+                first_time = false;
+            }
+            
+            for(int client_id=0; client_id<clients_count; client_id++) {
+                //Left
+                for(int j=0; j<clients_count; j++){
+                    String data = tmp_dominos_list_l.get(j).get(0)+","+tmp_dominos_list_l.get(j).get(1)+","+tmp_dominos_list_l.get(j).get(2)+","+tmp_dominos_list_l.get(j).get(3)+","+tmp_dominos_list_l.get(j).get(4);
+                    Server.toClient(client_id, data);
+                }
+                
+                //Right
+                for(int j=0; j<clients_count; j++){
+                    String data = tmp_dominos_list_r.get(j).get(0)+","+tmp_dominos_list_r.get(j).get(1)+","+tmp_dominos_list_r.get(j).get(2)+","+tmp_dominos_list_r.get(j).get(3)+","+tmp_dominos_list_r.get(j).get(4);
+                    Server.toClient(client_id, data);
+                }
+            }
+            
+            for(int client_id=0; client_id<clients_count; client_id++) {
+                
+                Server.toClient(client_id, "play");
+                
+                //Move
+                System.out.println(Server.fromClient(client_id));
+                
+                //Select
+                System.out.println(Server.fromClient(client_id));  
+            }
+            
+            for(int client_id=0; client_id<clients_count; client_id++) {
+                Server.toClient(client_id, "nextround");
+            }
+            
+            tmp_dominos_list_l = (ArrayList)tmp_dominos_list_r.clone();
+            tmp_dominos_list_r.clear();  
+        }
     }
 }
