@@ -10,6 +10,15 @@ public class Main {
         
         Server server = new Server();
         
+        //Parse domino.txt
+        DominoParser dp = new DominoParser();
+        
+        //Get dominos list
+        ArrayList<ArrayList<String>> dominos_list = dp.getDominos();
+        
+        //Shuffle dominos
+        Collections.shuffle(dominos_list);
+        
         //Handle player's turn
         ArrayList<Integer> turn = new ArrayList<>();
 
@@ -44,6 +53,7 @@ public class Main {
             Server.toClient(i, players.get(i).getName());
             Server.toClient(i, players.get(i).getColor());
             
+            //Wait for other players
             if(i >= 1) {
                 boolean wait = false;
                 for(int j=0; j<player_wait.size(); j++) {
@@ -63,27 +73,31 @@ public class Main {
         System.out.println(clients_count);
         
         for(int i=0; i<clients_count; i++) {
-            Server.toClient(i, "start");  
+            Server.toClient(i, "start");
+            Server.toClient(i, clients_count+"");
         }
 
         //Shuffle turns to start the game
         Collections.shuffle(turn);
+        System.out.println(turn);
 
+        int list_size_full = dominos_list.size();
+
+        for(int i=list_size_full-1; i>12*clients_count-1; i--){
+            dominos_list.remove(i);
+        }        
+        
         for(int i=0; i<clients_count; i++) {
-            for(int j=0; j<4; j++){
+            for(int j=0; j<clients_count; j++){
                 Server.toClient(i, "0,land,0,land,0");
             }
-            for(int j=0; j<4; j++){
+            for(int j=0; j<clients_count; j++){
                 Server.toClient(i, "0,lake,0,lake,0");
             }
         }
         
         while(true){
         
-        }
-        
-//        DominoParser dp = new DominoParser();
-        
+        }  
     }
-    
 }
