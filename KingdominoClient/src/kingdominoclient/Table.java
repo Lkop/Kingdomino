@@ -1,5 +1,7 @@
 package kingdominoclient;
 
+import java.awt.Color;
+
 
 public class Table {
     
@@ -7,6 +9,8 @@ public class Table {
     private int width;
     
     private Tile domino_tile[][];
+    
+    private boolean castle_setted = false;
     
     public Table(int height, int width){
         this.height = height;
@@ -25,6 +29,16 @@ public class Table {
     
     public Tile getTile(int i, int j) {
         return this.domino_tile[i][j];
+    }
+    
+    public boolean isCastleSetted() {
+        return this.castle_setted;
+    }
+    
+    public boolean setCastle(int i, int j, Color color) {
+        domino_tile[i][j] = new Tile("castle", 0);
+        this.castle_setted = true;
+        return true;
     }
     
     public boolean setDomino(int i, int j, Domino domino) {
@@ -54,5 +68,5 @@ public class Table {
             domino_tile[i+1][j] = domino.getTile1();
         }
         return true;
-    }
+    }  
 }

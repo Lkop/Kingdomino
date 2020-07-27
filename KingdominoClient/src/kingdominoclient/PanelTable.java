@@ -21,6 +21,7 @@ public class PanelTable extends JPanel{
     private JLabel name, color, score;
     
     private Table table;
+    private Color color_c;
     private JLabel tiles[][];
     
     private Domino preview_domino;
@@ -30,8 +31,9 @@ public class PanelTable extends JPanel{
     
     private JButton ok_button;
     
-    public PanelTable(Table table) {   
+    public PanelTable(Table table, Color color) {   
         this.table = table;
+        this.color_c = color;
         
         setLayout(new BorderLayout());
         add(createPlayerData(), BorderLayout.NORTH);
@@ -178,8 +180,14 @@ public class PanelTable extends JPanel{
             for(int j=0; j<table.getWidth(); j++) {
                 
                 Tile tile = table.getTile(i, j);
-                if(tile != null)
-                    setTileImage(i, j, tile.getImage());   
+                if(tile != null){
+                    if(tile.getImage().equals("castle")){
+                        tiles[i][j].setBackground(color_c);
+                        tiles[i][j].setOpaque(true);
+                    }else{
+                        setTileImage(i, j, tile.getImage()); 
+                    } 
+                }
             }
         }
     }
