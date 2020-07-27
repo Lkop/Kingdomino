@@ -22,9 +22,22 @@ public class DominoParser {
                 String[] parts = st.split(",");
                 
                 ArrayList<String> domino = new ArrayList<>();
+                
+                //ID
                 domino.add(parts[0]);
+                
+                //Image - crowns
                 domino.add(parts[1]);
+                if(parts[1].charAt(parts[1].length()-1) == 'c')
+                    domino.add(parts[1].charAt(parts[1].length()-2)+"");
+                else
+                    domino.add(0+"");
+                        
                 domino.add(parts[2]);
+                if(parts[2].charAt(parts[2].length()-1) == 'c')
+                    domino.add(parts[2].charAt(parts[2].length()-2)+"");
+                else
+                    domino.add(0+"");
                 
                 dominos_list.add(domino);
             }
