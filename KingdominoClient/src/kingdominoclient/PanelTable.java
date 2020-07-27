@@ -114,7 +114,9 @@ public class PanelTable extends JPanel{
                
         JButton b1 = new JButton("Rotate");
         JButton b2 = new JButton("Occupied Position");
+        
         ok_button = new JButton("Set Domino");
+        ok_button.setEnabled(false);
         
         panel.add(b1);
         panel.add(b2);
@@ -202,7 +204,7 @@ public class PanelTable extends JPanel{
     
     public void addMouseListener(String type, MouseListener ml) {
         if(type.equals("right")){
-            for(int i=0; i<4; i++) {
+            for(int i=0; i<dominos_r; i++) {
                     for(int j=2; j<4; j++) {
                        right_tiles[i][j].addMouseListener(ml); 
                     }
@@ -229,7 +231,15 @@ public class PanelTable extends JPanel{
         preview_tiles[0][0].setIcon(resizeImage(domino.getTile1().getImage(), preview_tiles[0][0]));
         preview_tiles[0][1].setIcon(resizeImage(domino.getTile2().getImage(), preview_tiles[0][1]));
     }
-        
+    
+    public void enableOkButton() {
+        ok_button.setEnabled(true);
+    }
+    
+    public void disableOkButton() {
+        ok_button.setEnabled(false);
+    }
+    
     public void addOkButtonListener(ActionListener al) {
         ok_button.addActionListener(al);
     }
