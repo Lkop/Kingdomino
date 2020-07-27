@@ -20,8 +20,9 @@ public class PanelTable extends JPanel{
     
     private JLabel name, color, score;
     
-    private Table table;
+    private int table_h, table_w, dominos_r;
     private Color color_c;
+    
     private JLabel tiles[][];
     
     private Domino preview_domino;
@@ -31,8 +32,10 @@ public class PanelTable extends JPanel{
     
     private JButton ok_button;
     
-    public PanelTable(Table table, Color color) {   
-        this.table = table;
+    public PanelTable(int table_h, int table_w, int dominos_r, Color color) {   
+        this.table_h = table_h;
+        this.table_w = table_w;
+        this.dominos_r = dominos_r;
         this.color_c = color;
         
         setLayout(new BorderLayout());
@@ -61,12 +64,12 @@ public class PanelTable extends JPanel{
     private JPanel createPanelTable() {
         
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(table.getHeight(),table.getWidth()));
+        panel.setLayout(new GridLayout(table_h,table_w));
         
-        tiles = new JLabel[table.getHeight()][table.getWidth()];
+        tiles = new JLabel[table_h][table_w];
 
-        for(int i=0; i<table.getHeight(); i++) {
-            for(int j=0; j<table.getWidth(); j++) {
+        for(int i=0; i<table_h; i++) {
+            for(int j=0; j<table_w; j++) {
                 
                 tiles[i][j] = new JLabel();
                 
@@ -139,12 +142,12 @@ public class PanelTable extends JPanel{
         
         //Left
         JPanel inner[] = new JPanel[2];
-        inner[0] = new JPanel(new GridLayout(4,1,0,10));
-        inner[1] = new JPanel(new GridLayout(4,1,0,10));
+        inner[0] = new JPanel(new GridLayout(dominos_r,1,0,10));
+        inner[1] = new JPanel(new GridLayout(dominos_r,1,0,10));
         
-        right_tiles = new JLabel[4][4];
+        right_tiles = new JLabel[dominos_r][4];
 
-        for(int i=0; i<4; i++) {
+        for(int i=0; i<dominos_r; i++) {
             for(int j=0; j<2; j++) {
 
                 right_tiles[i][j] = new JLabel(i+" = "+j);
@@ -158,7 +161,7 @@ public class PanelTable extends JPanel{
         }
         dominos.add(inner[0]);
 
-        for(int i=0; i<4; i++) {
+        for(int i=0; i<dominos_r; i++) {
             for(int j=2; j<4; j++) {
 
                 right_tiles[i][j] = new JLabel(i+" = "+j);
@@ -207,8 +210,8 @@ public class PanelTable extends JPanel{
             return;
         }
         
-        for(int i=0; i<table.getHeight(); i++) {
-            for(int j=0; j<table.getWidth(); j++) {
+        for(int i=0; i<table_h; i++) {
+            for(int j=0; j<table_w; j++) {
                tiles[i][j].addMouseListener(ml); 
             }
         }    
