@@ -18,30 +18,18 @@ public class PanelMenu extends JPanel{
     public PanelMenu(){
         
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-        add(new JLabel("<html><h2 style=\"text-align:center;\">Kingdomino</h2><BR></html>"));
+        add(new JLabel("Kingdomino"));
         
         JPanel buttons = new JPanel(new GridLayout(0,1));
         
         start = new JButton("Start Game");
         start.setBorderPainted(false);
-//        start.addMouseListener(new java.awt.event.MouseAdapter() {
-//            @Override
-//            public void mouseEntered(java.awt.event.MouseEvent evt) {
-//                start.setBackground(Color.RED);
-//            }
-//
-//            @Override
-//            public void mouseExited(java.awt.event.MouseEvent evt) {
-//                start.setBackground(UIManager.getColor("control"));
-//            }
-//        });
                 
         JButton stop = new JButton("Stop Game");
         stop.setEnabled(false);
         stop.setBorderPainted(false);
         
         JButton exit = new JButton("Exit");
-        //exit.setContentAreaFilled(false);
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
